@@ -19,51 +19,40 @@ let modifyFile3 = (val) => {
 // gunakan variabel file1, file2, dan file3
 const bacaData = (fnCallback) => {
   let arrayOfString = [];
-  try {
+  const promise = new Promise((resolve, reject) => {
+    fs.readFile(file1, 'utf8', (err, data) => {
+      if (err) reject(err);
 
-    // create a promise
-    const promise = new Promise((resolve, reject) => {
-      fs.readFile(file1, 'utf8', (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          const json1 = JSON.parse(data);
-          arrayOfString.push(json1.message.split(' ')[1]);
-        }
-      });
-
-      fs.readFile(file2, 'utf8', (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          const json2 = JSON.parse(data);
-          arrayOfString.push(json2[0].message.split(' ')[1]);
-        }
-      });
-
-      fs.readFile(file3, 'utf8', (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          const json3 = JSON.parse(data);
-          arrayOfString.push(json3[0].data.message.split(' ')[1]);
-        }
-
-        // resolve the promise
-        resolve(arrayOfString);
-      });
+      const json1 = JSON.parse(data);
+      arrayOfString.push(json1.message.split(' ')[1]);
     });
 
+    fs.readFile(file2, 'utf8', (err, data) => {
+      if (err) reject(err);
 
-    // if the promise is resolved, then call the callback function
-    promise.then((data) => {
-      fnCallback(null, data);
-    }).catch((err) => {
-      fnCallback(err, null);
+      const json2 = JSON.parse(data);
+      arrayOfString.push(json2[0].message.split(' ')[1]);
     });
-  } catch (err) {
+
+    fs.readFile(file3, 'utf8', (err, data) => {
+      if (err) reject(err);
+
+      const json3 = JSON.parse(data);
+      arrayOfString.push(json3[0].data.message.split(' ')[1]);
+
+      // resolve the promise and pass the array of string
+      resolve(arrayOfString);
+    });
+  });
+
+
+  // if the promise is resolved and get the array of string,
+  // then call the callback function
+  promise.then((data) => {
+    fnCallback(null, data);
+  }).catch((err) => {
     fnCallback(err, null);
-  }
+  });
 
 };
 
