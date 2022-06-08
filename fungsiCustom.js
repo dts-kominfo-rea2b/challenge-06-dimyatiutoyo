@@ -21,21 +21,21 @@ const bacaData = (fnCallback) => {
   let arrayOfString = [];
   try {
     fs.readFile(file1, 'utf8', (err, data) => {
-      if (err) fnCallback(err, null);;
+      if (err) fnCallback(err, null);
 
       const json1 = JSON.parse(data);
       arrayOfString.push(json1.message.split(' ')[1]);
     });
 
     fs.readFile(file2, 'utf8', (err, data) => {
-      if (err) fnCallback(err, null);;
+      if (err) fnCallback(err, null);
 
       const json2 = JSON.parse(data);
       arrayOfString.push(json2[0].message.split(' ')[1]);
     });
 
     fs.readFile(file3, 'utf8', (err, data) => {
-      if (err) fnCallback(err, null);;
+      if (err) fnCallback(err, null);
 
       const json3 = JSON.parse(data);
       arrayOfString.push(json3[0].data.message.split(' ')[1]);
